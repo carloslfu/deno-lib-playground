@@ -753,15 +753,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "cmake"
-version = "0.1.51"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "fb1e43aa7fd152b1f968787f7dbcdeb306d1867ff373c69955211876c053f91a"
-dependencies = [
- "cc",
-]
-
-[[package]]
 name = "codespan-reporting"
 version = "0.11.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1588,9 +1579,9 @@ dependencies = [
 
 [[package]]
 name = "deno_lib"
-version = "2.0.9"
+version = "2.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c3469808ac99a720d1bf31e1724193c4189be54f0c469dc6953dbc28923e925d"
+checksum = "cb28e66402db2726fb61a9f950b04ee910f76344d6d5d722f30ba9653c9b775b"
 dependencies = [
  "anstream",
  "async-trait",
@@ -2995,13 +2986,12 @@ checksum = "0ce7134b9999ecaf8bcd65542e436736ef32ddca1b3e06094cb6ec5755203b80"
 
 [[package]]
 name = "flate2"
-version = "1.0.35"
+version = "1.0.31"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c936bfdafb507ebbf50b8074c54fa31c5be9a1e7e5f467dd659697041407d07c"
+checksum = "7f211bbe8e69bbd0cfdea405084f128ae8b4aaa6b0b522fc8f2b009084797920"
 dependencies = [
  "crc32fast",
- "libz-sys",
- "miniz_oxide 0.8.0",
+ "miniz_oxide 0.7.4",
 ]
 
 [[package]]
@@ -4214,8 +4204,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "d2d16453e800a8cf6dd2fc3eb4bc99b786a9b90c663b8559a5b1a041bf89e472"
 dependencies = [
  "cc",
- "cmake",
- "libc",
  "pkg-config",
  "vcpkg",
 ]
@@ -8209,9 +8197,9 @@ dependencies = [
 
 [[package]]
 name = "zip"
-version = "2.2.0"
+version = "2.1.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "dc5e4288ea4057ae23afc69a4472434a87a2495cafce6632fd1c4ec9f5cf3494"
+checksum = "40dd8c92efc296286ce1fbd16657c5dbefff44f1b4ca01cc5f517d8b7b3d3e2e"
 dependencies = [
  "arbitrary",
  "crc32fast",

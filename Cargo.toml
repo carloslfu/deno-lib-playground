@@ -4,4 +4,4 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-deno_lib = { version = "2.0.9" }
+deno_lib = { version = "2.2.0" }
