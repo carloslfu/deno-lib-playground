@@ -4,4 +4,6 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-deno_lib_ext = { version = "0.1.0" }
+deno_lib_ext = { version = "0.2.4" }
+deno_core = { version = "0.323.0" }
+dirs = "5.0.1"

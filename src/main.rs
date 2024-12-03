@@ -4,6 +4,19 @@ use deno_lib_ext::deno_runtime::deno_permissions::PermissionPrompter;
 use deno_lib_ext::deno_runtime::deno_permissions::PromptResponse;
 use deno_lib_ext::run;
 
+deno_lib_ext::deno_runtime::deno_core::extension!(
+    runtime_extension,
+    ops = [document_dir],
+    esm_entry_point = "ext:runtime_extension/bootstrap.js",
+    esm = [dir "src", "bootstrap.js"]
+);
+
+#[deno_lib_ext::deno_core::op2]
+#[string]
+fn document_dir() -> Option<String> {
+    dirs::document_dir().map(|path| path.to_string_lossy().to_string())
+}
+
 fn main() {
     println!("Hello, world!");
 
@@ -20,7 +33,12 @@ fn main() {
 
     std::env::set_var("DENO_TRACE_PERMISSIONS", "1");
 
-    run("./test.ts");
+    let extensions = vec![runtime_extension::init_ops_and_esm()];
+    println!("Number of extensions: {}", extensions.len());
+
+    println!("Extensions: {:p}", extensions.as_ptr());
+
+    run("./test.ts", extensions);
 }
 
 struct CustomPrompter;

@@ -28,4 +28,8 @@ async function findFolders() {
 
 const result = await findFolders();
 
+const documentDir = RuntimeExtension.documentDir();
+
+console.log("documentDir", documentDir);
+
 console.log("result", result);

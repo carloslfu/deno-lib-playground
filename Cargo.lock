@@ -1174,7 +1174,9 @@ dependencies = [
 name = "deno-lib-playground"
 version = "0.1.0"
 dependencies = [
+ "deno_core",
  "deno_lib_ext",
+ "dirs",
 ]
 
 [[package]]
@@ -1659,9 +1661,9 @@ dependencies = [
 
 [[package]]
 name = "deno_lib_ext"
-version = "0.1.0"
+version = "0.2.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "eebd0ce13903e5dfc03df09b69f113c02257369c4b5a1434ba962e47e33cd9ae"
+checksum = "3eaff4fdc92be5b1f7b17d37478cd5cf8704b777abab40b6743f54271fc97218"
 dependencies = [
  "anstream",
  "async-trait",
