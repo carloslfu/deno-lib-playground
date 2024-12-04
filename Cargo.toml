@@ -4,6 +4,9 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-deno_lib_ext = { version = "0.2.4" }
+tokio = { version = "1.36.0", features = ["full"] }
+deno_lib_ext = { version = "0.5.0" }
+deno_runtime = { version = "0.189.0" }
 deno_core = { version = "0.323.0" }
+clap = { version = "=4.5.16", features = ["env", "string", "wrap_help", "error-context"] }
 dirs = "5.0.1"

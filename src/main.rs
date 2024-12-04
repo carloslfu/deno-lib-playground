@@ -2,24 +2,22 @@ use deno_lib_ext::deno_runtime::deno_core::error::JsStackFrame;
 use deno_lib_ext::deno_runtime::deno_permissions::set_prompter;
 use deno_lib_ext::deno_runtime::deno_permissions::PermissionPrompter;
 use deno_lib_ext::deno_runtime::deno_permissions::PromptResponse;
-use deno_lib_ext::run;
 
-deno_lib_ext::deno_runtime::deno_core::extension!(
+deno_core::extension!(
     runtime_extension,
-    ops = [document_dir],
-    esm_entry_point = "ext:runtime_extension/bootstrap.js",
-    esm = [dir "src", "bootstrap.js"]
+    ops = [op_document_dir],
+    esm_entry_point = "ext:runtime_extension/mod.js",
+    esm = [dir "src", "mod.js"],
 );
 
-#[deno_lib_ext::deno_core::op2]
+#[deno_core::op2]
 #[string]
-fn document_dir() -> Option<String> {
-    dirs::document_dir().map(|path| path.to_string_lossy().to_string())
+fn op_document_dir() -> String {
+    "dirs::document_dir().map(|path| path.to_string_lossy().to_string())".to_string()
 }
 
-fn main() {
-    println!("Hello, world!");
-
+#[tokio::main(flavor = "current_thread")]
+async fn main() {
     set_prompter(Box::new(CustomPrompter));
 
     std::env::set_var(
@@ -33,12 +31,9 @@ fn main() {
 
     std::env::set_var("DENO_TRACE_PERMISSIONS", "1");
 
-    let extensions = vec![runtime_extension::init_ops_and_esm()];
-    println!("Number of extensions: {}", extensions.len());
-
-    println!("Extensions: {:p}", extensions.as_ptr());
-
-    run("./test.ts", extensions);
+    let result =
+        deno_lib_ext::run_file("./test.ts", vec![runtime_extension::init_ops_and_esm()]).await;
+    println!("Result: {:?}", result);
 }
 
 struct CustomPrompter;

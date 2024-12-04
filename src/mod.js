@@ -1,7 +1,7 @@
-import { document_dir } from "ext:core/ops";
+import { op_document_dir } from "ext:core/ops";
 
 function documentDir() {
-  return document_dir();
+  return op_document_dir();
 }
 
 globalThis.RuntimeExtension = { documentDir };
