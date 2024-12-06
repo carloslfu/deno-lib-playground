@@ -1,7 +1,8 @@
-import { op_document_dir } from "ext:core/ops";
+// import { document_dir } from "ext:runtime_extension/mod.js";
 
 function documentDir() {
-  return op_document_dir();
+  // return document_dir();
+  return "--called---";
 }
 
 globalThis.RuntimeExtension = { documentDir };
