@@ -1,8 +1,7 @@
-// import { document_dir } from "ext:runtime_extension/mod.js";
+const { ops } = globalThis.Deno.core;
 
 function documentDir() {
-  // return document_dir();
-  return "--called---";
+  return ops.custom_op_document_dir();
 }
 
 globalThis.RuntimeExtension = { documentDir };

@@ -5,8 +5,10 @@ edition = "2021"
 
 [dependencies]
 tokio = { version = "1.36.0", features = ["full"] }
-deno_lib_ext = { version = "0.5.2" }
+deno_lib_ext = { version = "0.6.2" }
 deno_runtime = { version = "0.189.0" }
 deno_core = { version = "0.323.0" }
+# deno_runtime = { version = "0.189.0", features = ["include_js_files_for_snapshotting"] }
+# deno_core = { version = "0.323.0", features = ["include_js_files_for_snapshotting"] }
 clap = { version = "=4.5.16", features = ["env", "string", "wrap_help", "error-context"] }
 dirs = "5.0.1"

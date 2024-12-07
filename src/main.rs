@@ -17,32 +17,42 @@ use deno_runtime::deno_core::error::JsError;
 
 deno_core::extension!(
     runtime_extension,
-    ops = [document_dir],
+    ops = [custom_op_document_dir],
     esm_entry_point = "ext:runtime_extension/mod.js",
     esm = [dir "src", "mod.js"],
 );
 
 #[deno_core::op2]
 #[string]
-fn document_dir() -> Option<String> {
+fn custom_op_document_dir() -> Option<String> {
     dirs::document_dir().map(|path| path.to_string_lossy().to_string())
 }
 
-// deno_core::extension!(
-//     my_ext2,
-//     ops = [my_op2],
-//     esm_entry_point = "ext:my_ext2/my_ext.js",
-//     esm = [dir "src", "my_ext.js"],
-// );
+deno_core::extension!(
+    my_ext2,
+    ops = [custom_op_my_op2],
+    esm_entry_point = "ext:my_ext2/my_ext.js",
+    esm = [dir "src", "my_ext.js"],
+);
 
-// #[deno_core::op2]
-// #[string]
-// fn my_op2() -> String {
-//     "my_op2".to_string()
-// }
+#[deno_core::op2]
+#[string]
+fn custom_op_my_op2() -> String {
+    "my_op2".to_string()
+}
 
 #[tokio::main(flavor = "current_thread")]
 async fn main() {
+    // get filename from args
+    let args = std::env::args().collect::<Vec<String>>();
+    let empty = String::new();
+    let filename = args.get(1).unwrap_or(&empty);
+
+    if filename.is_empty() {
+        println!("No filename provided");
+        return;
+    }
+
     set_prompter(Box::new(CustomPrompter));
 
     std::env::set_var(
@@ -56,7 +66,23 @@ async fn main() {
 
     std::env::set_var("DENO_TRACE_PERMISSIONS", "1");
 
-    let result = run_file("./test.ts", vec![]).await;
+    println!("Starting...");
+
+    let start = std::time::Instant::now();
+
+    let result = run_file(
+        &filename,
+        vec![
+            runtime_extension::init_ops_and_esm(),
+            my_ext2::init_ops_and_esm(),
+        ],
+    )
+    .await;
+
+    let duration = start.elapsed();
+
+    println!("Time elapsed: {:?}", duration);
+
     println!("Result: {:?}", result);
 }
 
@@ -112,8 +138,6 @@ impl PermissionPrompter for CustomPrompter {
     }
 }
 
-// ---- from deno_lib_ext ----
-
 async fn run_file(
     file_path: &str,
     extensions: Vec<deno_runtime::deno_core::Extension>,
@@ -127,8 +151,6 @@ async fn run_file(
 
     check_permission_before_script(&flags);
 
-    // TODO(bartlomieju): actually I think it will also fail if there's an import
-    // map specified and bare specifier is used on the command line
     let factory = CliFactory::from_flags(Arc::new(flags));
     let cli_options = factory.cli_options()?;
 
@@ -138,34 +160,16 @@ async fn run_file(
         set_npm_user_agent();
     }
 
-    println!("👀 maybe_npm_install");
-
     maybe_npm_install(&factory).await?;
-
-    println!("👀 create_cli_main_worker_factory");
 
     let worker_factory = factory.create_cli_main_worker_factory(Some(false)).await?;
 
-    println!("👀 create_main_worker");
-
-    let ext = runtime_extension::init_ops_and_esm();
-
-    println!("👀 ext.enabled: {:?}", ext.enabled);
-
-    let extensions_2 = vec![ext];
-
-    // print extensions memory address
-    println!("👀 extensions memory address: {:p}", &extensions_2);
-
     let mut worker = worker_factory
-        .create_main_worker(WorkerExecutionMode::None, main_module.clone(), extensions_2)
+        .create_main_worker(WorkerExecutionMode::None, main_module.clone(), extensions)
         .await?;
-
-    println!("👀 worker.run");
 
     let exit_code = worker.run().await?;
 
-    println!("👀 exit_code: {:?}", exit_code);
     Ok(exit_code)
 }
 
